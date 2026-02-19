@@ -1,0 +1,5 @@
+# Auto Job Applier LinkedIn - Python dependencies
+pyautogui>=1.0.0
+selenium>=4.0.0
+# Optional: uncomment if using stealth_mode in config
+# undetected-chromedriver>=3.0.0
