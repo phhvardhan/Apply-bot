@@ -163,7 +163,8 @@ def get_applied_job_ids() -> set[str]:
         with open(file_name, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             for row in reader:
-                job_ids.add(row[0])
+                if row and not str(row[0]).startswith("RUN_"):
+                    job_ids.add(row[0])
     except FileNotFoundError:
         print_lg(f"The CSV file '{file_name}' does not exist.")
     return job_ids
@@ -1176,9 +1177,34 @@ def run(total_runs: int) -> int:
 chatGPT_tab = False
 linkedIn_tab = False
 
+def _log_run_marker_to_csv(job_id: str, title: str, extra: str = "") -> None:
+    """Append a run start/end marker row to the applied jobs CSV (same file as job details)."""
+    fieldnames = ['Job ID', 'Title', 'Company', 'Work Location', 'Work Style', 'About Job', 'Experience required', 'Skills required', 'HR Name', 'HR Link', 'Resume', 'Re-posted', 'Date Posted', 'Date Applied', 'Job Link', 'External Job link', 'Questions Found', 'Connect Request']
+    try:
+        os.makedirs(os.path.dirname(file_name) or ".", exist_ok=True)
+        with open(file_name, mode='a', newline='', encoding='utf-8') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if csv_file.tell() == 0:
+                writer.writeheader()
+            writer.writerow({
+                'Job ID': job_id, 'Title': title, 'Company': '', 'Work Location': '', 'Work Style': '',
+                'About Job': extra, 'Experience required': '', 'Skills required': '', 'HR Name': '', 'HR Link': '',
+                'Resume': '', 'Re-posted': '', 'Date Posted': '', 'Date Applied': '', 'Job Link': '', 'External Job link': '',
+                'Questions Found': '', 'Connect Request': ''
+            })
+    except Exception as e:
+        print_lg("Failed to log run marker to CSV:", e)
+
 def main() -> None:
     pyautogui.alert("Ready to start applying. Click Okay to continue.", "Auto Job Applier", "Okay")
     total_runs = 1
+    run_start = datetime.now()
+    run_start_str = run_start.strftime("%Y-%m-%d %H:%M:%S")
+    print_lg(f"\n{'='*60}\nRun started at: {run_start_str}\n{'='*60}\n")
+    try:
+        _log_run_marker_to_csv("RUN_START", f"Run started at: {run_start_str}")
+    except Exception:
+        pass
     try:
         global linkedIn_tab, tabs_count, useNewResume, aiClient
         alert_title = "Error Occurred. Closing Browser!"
@@ -1247,6 +1273,16 @@ def main() -> None:
         critical_error_log("In Applier Main", e)
         pyautogui.alert(e,alert_title)
     finally:
+        run_end_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print_lg(f"\nRun ended at: {run_end_str}\n")
+        try:
+            _log_run_marker_to_csv(
+                "RUN_END",
+                f"Run ended at: {run_end_str}",
+                extra=f"Easy applied: {easy_applied_count} | External: {external_jobs_count} | Failed: {failed_count} | Skipped: {skip_count}"
+            )
+        except Exception:
+            pass
         summary = "Total runs: {}\nJobs Easy Applied: {}\nExternal job links collected: {}\nTotal applied or collected: {}\nFailed jobs: {}\nIrrelevant jobs skipped: {}\n".format(total_runs,easy_applied_count,external_jobs_count,easy_applied_count + external_jobs_count,failed_count,skip_count)
         print_lg(summary)
         print_lg("\n\nTotal runs:                     {}".format(total_runs))

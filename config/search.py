@@ -7,8 +7,15 @@ License: GNU AGPL-3.0
 ###################################################### LINKEDIN SEARCH PREFERENCES ######################################################
 
 # These Sentences are Searched in LinkedIn
-# Enter your search terms inside '[ ]' with quotes ' "searching title" ' for each search followed by comma ', ' Eg: ["Software Engineer", "Software Developer", "Selenium Developer"]
-search_terms = ["ServiceNow Developer", "ServiceNow Administrator", "ServiceNow Consultant" ,"ServiceNow Architect","ServiceNow Integrations Engineer"]        # (dynamic multiple search) Eg: ["Software Engineer", "Software Developer", "Selenium Developer"]
+# Use many specific phrases (product + role) so LinkedIn returns mostly relevant titles and fewer generic matches (e.g. "Architect", "Webmaster").
+# Enter your search terms inside '[ ]' with quotes ' "searching title" ' for each search followed by comma ', '
+search_terms = [
+    "ServiceNow Developer",
+    "ServiceNow Administrator",
+    "ServiceNow Consultant",
+    "ServiceNow Architect",
+    "ServiceNow Integrations Engineer",
+]        # Add or remove terms; more specific = fewer irrelevant results, more searches to cycle through
 
 # Search location, this will be filled in "City, state, or zip code" search box. If left empty as "", tool will not fill it.
 search_location = "United States"               # Some valid examples: "", "United States", "India", "Chicago, Illinois, United States", "90001, Los Angeles, California, United States", "Bengaluru, Karnataka, India", etc.
@@ -47,8 +54,59 @@ experience_level = ["Associate", "Mid-Senior level"]              # (multiple se
 job_type = ["Full-time"]                      # (multiple select) "Full-time", "Part-time", "Contract", "Temporary", "Volunteer", "Internship", "Other"
 on_site = []                       # (multiple select) "On-site", "Remote", "Hybrid"
 
-companies = []                     # (dynamic multiple select) make sure the name you type in list exactly matches with the company name you're looking for, including capitals. 
-                                   # Eg: "7-eleven", "Google","X, the moonshot factory","YouTube","CapitalG","Adometry (acquired by Google)","Meta","Apple","Byte Dance","Netflix", "Snowflake","Mineral.ai","Microsoft","JP Morgan","Barclays","Visa","American Express", "Snap Inc", "JPMorgan Chase & Co.", "Tata Consultancy Services", "Recruiting from Scratch", "Epic", and so on...
+companies = [                     # (dynamic multiple select) make sure the name you type in list exactly matches with the company name you're looking for, including capitals. 
+    # # Bucket A
+    # "Deloitte",
+    # "Accenture",
+    # "Cognizant",
+    # "Capgemini",
+    # "Infosys",
+    # "Tata Consultancy Services",
+    # "Wipro",
+    # "HCLTech",
+    # "NTT DATA",
+    # "IBM Consulting",
+
+    # # Bucket B
+    # "Perficient",
+    # "NewRocket",
+    # "Cask",
+    # "Guidehouse",
+    # "Pathways Consulting Group",
+    # "CRI Advantage",
+    # "10Pearls",
+    # "Xavor",
+    # "Synoptek",
+    # "SoftSages",
+    # "ProV International",
+    # "Infocenter",
+    # "Crossfuze",
+    # "GlideFast Consulting",
+    # "Thirdera",
+    # "Alcor Solutions",
+    # "Neuraflash",
+    # "Evergreen Systems",
+    # "Royal Cyber",
+    # "InMorphis",
+    # "Netsmart",
+    # "Intact Technology",
+    # "Volteo Digital",
+
+    # # Bucket C
+    # "Optum",
+    # "Huron Consulting Group",
+    # "RSM US",
+    # "KPMG",
+    # "Slalom",
+    # "Genpact",
+    # "LTIMindtree",
+    # "DXC Technology",
+    # "CDW",
+    # "Insight Enterprises",
+    # "ePlus",
+    # "SADA",
+    # "Trianz",
+] 
 location = []                      # (dynamic multiple select)
 industry = []                      # (dynamic multiple select)
 job_function = []                  # (dynamic multiple select)
@@ -72,7 +130,7 @@ pause_after_filters = True         # True or False, Note: True or False are case
 
 
 ## >>>>>>>>>>> SKIP IRRELEVANT JOBS <<<<<<<<<<<
- 
+
 # Avoid applying to these companies, and companies with these bad words in their 'About Company' section...
 about_company_bad_words = ["Crossover"]       # (dynamic multiple search) or leave empty as []. Ex: ["Staffing", "Recruiting", "Name of Company you don't want to apply to"]
 
